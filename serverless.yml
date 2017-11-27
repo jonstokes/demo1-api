@@ -92,12 +92,6 @@ functions:
 #       Value: "Some output value"
 
 resources:
-  Parameters:
-    AuthName:
-      Default: ${self:service}
-      Type: String
-      Description: Unique Auth Name for Cognito Resources
-
   Resources:
     # Creates a role that allows Cognito to send SNS messages
     SNSRole:
@@ -127,13 +121,12 @@ resources:
     UserPool:
       Type: "AWS::Cognito::UserPool"
       Properties:
-        UserPoolName: !Sub ${AuthName}-user-pool
+        UserPoolName: ${self:service}-user-pool
+        AliasAttributes:
+          - email
         AutoVerifiedAttributes:
           - email
         MfaConfiguration: "OFF"
-        SmsConfiguration:
-          ExternalId: !Sub ${AuthName}-external
-          SnsCallerArn: !GetAtt SNSRole.Arn
         Schema:
           - Name: email
             AttributeDataType: String
@@ -144,19 +137,22 @@ resources:
     UserPoolClient:
       Type: "AWS::Cognito::UserPoolClient"
       Properties:
-        ClientName: !Sub ${AuthName}-client
+        ClientName: ${self:service}-client
         GenerateSecret: false
-        UserPoolId: !Ref UserPool
+        UserPoolId:
+          Ref: UserPool
     
     # Creates a federeated Identity pool
     IdentityPool:
       Type: "AWS::Cognito::IdentityPool"
       Properties:
-        IdentityPoolName: !Sub ${AuthName}Identity
+        IdentityPoolName: ${self:service}Identity
         AllowUnauthenticatedIdentities: true
         CognitoIdentityProviders: 
-          - ClientId: !Ref UserPoolClient
-            ProviderName: !GetAtt UserPool.ProviderName
+          - ClientId:
+              Ref: UserPoolClient
+            ProviderName:
+              "Fn::GetAtt": [UserPool, ProviderName]
 
     # Create a role for unauthorized acces to AWS resources. Very limited access. Only allows users in the previously created Identity Pool
     CognitoUnAuthorizedRole:
@@ -172,7 +168,8 @@ resources:
                 - "sts:AssumeRoleWithWebIdentity"
               Condition:
                 StringEquals: 
-                  "cognito-identity.amazonaws.com:aud": !Ref IdentityPool
+                  "cognito-identity.amazonaws.com:aud":
+                    Ref: IdentityPool
                 "ForAnyValue:StringLike":
                   "cognito-identity.amazonaws.com:amr": unauthenticated
         Policies:
@@ -201,7 +198,8 @@ resources:
                 - "sts:AssumeRoleWithWebIdentity"
               Condition:
                 StringEquals: 
-                  "cognito-identity.amazonaws.com:aud": !Ref IdentityPool
+                  "cognito-identity.amazonaws.com:aud":
+                    Ref: IdentityPool
                 "ForAnyValue:StringLike":
                   "cognito-identity.amazonaws.com:amr": authenticated
         Policies:
@@ -224,21 +222,27 @@ resources:
     IdentityPoolRoleMapping:
       Type: "AWS::Cognito::IdentityPoolRoleAttachment"
       Properties:
-        IdentityPoolId: !Ref IdentityPool
+        IdentityPoolId: 
+          Ref: IdentityPool
         Roles:
-          authenticated: !GetAtt CognitoAuthorizedRole.Arn
-          unauthenticated: !GetAtt CognitoUnAuthorizedRole.Arn
+          authenticated: 
+            "Fn::GetAtt": [CognitoAuthorizedRole, Arn]
+          unauthenticated: 
+            "Fn::GetAtt": [CognitoUnAuthorizedRole, Arn]
 
   Outputs:
     UserPoolId:
-      Value: !Ref UserPool
+      Value:
+        Ref: UserPool
       Export:
         Name: "UserPool::Id"
     UserPoolClientId:
-      Value: !Ref UserPoolClient
+      Value:
+        Ref: UserPoolClient
       Export:
         Name: "UserPoolClient::Id"
     IdentityPoolId:
-      Value: !Ref IdentityPool
+      Value:
+        Ref: IdentityPool
       Export:
         Name: "IdentityPool::Id"
