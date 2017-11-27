@@ -99,29 +99,7 @@ functions:
 
 resources:
   Resources:
-    # Creates a role that allows Cognito to send SNS messages
-    SNSRole:
-      Type: "AWS::IAM::Role"
-      Properties:
-        AssumeRolePolicyDocument: 
-          Version: "2012-10-17"
-          Statement:
-            - Effect: "Allow"
-              Principal: 
-                Service: 
-                  - "cognito-idp.amazonaws.com"
-              Action: 
-                - "sts:AssumeRole"
-        Policies:
-          - PolicyName: "CognitoSNSPolicy"
-            PolicyDocument: 
-              Version: "2012-10-17"
-              Statement: 
-                - Effect: "Allow"
-                  Action: "sns:publish"
-                  Resource: "*"
-
-    # Creates a role that allows Cognito to send SNS messages
+    # Creates a role that allows Cognito to send SES email messages
     SESRole:
       Type: "AWS::IAM::Role"
       Properties:
