@@ -1,4 +1,4 @@
-service: demo-1
+service: demo1
 
 provider:
   name: aws
