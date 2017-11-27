@@ -121,6 +121,30 @@ resources:
                   Action: "sns:publish"
                   Resource: "*"
 
+    # Creates a role that allows Cognito to send SNS messages
+    SESRole:
+      Type: "AWS::IAM::Role"
+      Properties:
+        AssumeRolePolicyDocument: 
+          Version: "2012-10-17"
+          Statement:
+            - Effect: "Allow"
+              Principal: 
+                Service: 
+                  - "cognito-idp.amazonaws.com"
+              Action: 
+                - "sts:AssumeRole"
+        Policies:
+          - PolicyName: "CognitoSESPolicy"
+            PolicyDocument: 
+              Version: "2012-10-17"
+              Statement: 
+                - Effect: "Allow"
+                  Action: 
+                    - "ses:SendEmail"
+                    - "ses:SendRawEmail"
+                  Resource: "*"
+
     # Creates a user pool in cognito for your app to auth against
     # This example requires MFA and validates the phone number to use as MFA
     # Other fields can be added to the schema
