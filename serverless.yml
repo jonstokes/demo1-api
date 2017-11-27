@@ -190,6 +190,10 @@ resources:
                     - "mobileanalytics:PutEvents"
                     - "cognito-sync:*"
                   Resource: "*"
+                - Effect: "Allow"
+                  Action:
+                    - "lambda:InvokeFunction"
+                  Resource: "*"
 
     # Create a role for authorized acces to AWS resources. Control what your user can access. This example only allows Lambda invokation
     # Only allows users in the previously created Identity Pool
