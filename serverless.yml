@@ -138,7 +138,7 @@ resources:
         Schema:
           - Name: email
             AttributeDataType: String
-            Mutable: false
+            Mutable: true
             Required: true
     
     # Creates a User Pool Client to be used by the identity pool
