@@ -4,6 +4,7 @@ module.exports.hello = (event, context, callback) => {
   const response = {
     statusCode: 200,
     headers: {
+      "Content-Type": "application/json",
       "Access-Control-Allow-Origin" : "*" // Required for CORS support to work
     },
     body: JSON.stringify({
