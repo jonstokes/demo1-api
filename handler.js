@@ -4,7 +4,7 @@ module.exports.hello = (event, context, callback) => {
   const response = {
     statusCode: 200,
     headers: {
-      "Custom-Header": "foobarbaz",
+      "X-Powered-By": "foobarbaz",
       "Content-Type": "application/json",
       "Access-Control-Allow-Origin" : "*" // Required for CORS support to work
     },
