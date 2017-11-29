@@ -51,6 +51,12 @@ functions:
           method: get
           cors: true
           authorizer: aws_iam
+  postSignUp:
+    handler: handler.postSignup
+    events:
+      - cognitoUserPool:
+          pool: ${self:service}-user-pool
+          trigger: PostConfirmation
 
 #    The following are a few example events you can configure
 #    NOTE: Please make sure to change your handler code to work with those events
