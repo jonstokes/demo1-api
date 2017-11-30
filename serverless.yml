@@ -60,7 +60,7 @@ functions:
           cors: true
           authorizer: aws_iam
   putHello:
-    handler: handler.hello
+    handler: handler.putHello
     events:
       - http:
           path: hello
