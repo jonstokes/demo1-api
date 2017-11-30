@@ -22,7 +22,7 @@ module.exports.hello = (event, context, callback) => {
 };
 
 module.exports.putHello = (event, context, callback) => {
-  const { event, variables } = event.body
+  const { query, variables } = event.body
   const identity = event.requestContext.identity
 
   console.log(query)
