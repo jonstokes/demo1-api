@@ -22,8 +22,8 @@ module.exports.hello = (event, context, callback) => {
 };
 
 module.exports.putHello = (event, context, callback) => {
-  const { body } = event
-  const { query, variables } = event.body
+  const body = JSON.parse(event.body)
+  const { query, variables } = body
   const identity = event.requestContext.identity
 
   console.log(query)
