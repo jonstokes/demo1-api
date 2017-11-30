@@ -1,3 +1,5 @@
+import { GraphQLBoolean } from '../../../Library/Caches/typescript/2.6/node_modules/@types/graphql/type/scalars';
+
 'use strict';
 
 module.exports.hello = (event, context, callback) => {
@@ -27,3 +29,43 @@ module.exports.postSignup = (event, context, callback) => {
   // Return result to Cognito
   context.done(null, event);      
 }
+
+const {
+  graphql,
+  GraphQLSchema,
+  GraphQLObjectType,
+  GraphQLString,
+  GraphQLNonNull
+} = require('graphql')
+
+const viewerType = new GraphQLObjectType({
+  name: 'Viewer',
+  fields: {
+    isLoggedIn: {
+      type: GraphQLBoolean,
+      resolve: (parent, args, ctx) => true
+    },
+    userName: {
+      type: GraphQLString,
+      resolve: (parent, args, ctx) => "DudesName"
+    }
+  }
+})
+
+// Here we declare the schema and resolvers for the query
+const schema = new GraphQLSchema({
+  query: new GraphQLObjectType({
+    name: 'Root',
+    fields: {
+      viewer: {
+        type: viewerType,
+      }
+    }
+  }),
+})
+
+module.exports.graphql = (event, context, callback) => graphql(schema, event.queryStringParameters.query)
+  .then(
+    result => callback(null, {statusCode: 200, body: JSON.stringify(result)}),
+    err => callback(err)
+  )
