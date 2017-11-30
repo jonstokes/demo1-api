@@ -1,5 +1,3 @@
-import { GraphQLBoolean } from '../../../Library/Caches/typescript/2.6/node_modules/@types/graphql/type/scalars';
-
 'use strict';
 
 module.exports.hello = (event, context, callback) => {
@@ -35,7 +33,8 @@ const {
   GraphQLSchema,
   GraphQLObjectType,
   GraphQLString,
-  GraphQLNonNull
+  GraphQLNonNull,
+  GraphQLBoolean
 } = require('graphql')
 
 const viewerType = new GraphQLObjectType({
