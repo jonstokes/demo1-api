@@ -48,7 +48,7 @@ functions:
       events:
         - http:
             path: graphql
-            method: put
+            method: post
             cors: true
             authorizer: aws_iam
   hello:
