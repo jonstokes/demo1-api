@@ -98,10 +98,15 @@ module.exports.graphql = (event, context, callback) => {
   const body = JSON.parse(event.body)
   const { query, variables } = body
   const identity = event.requestContext.identity
-  
+  const headers =  {
+    "Content-Type": "application/json",      
+    "Access-Control-Allow-Origin" : "*", // Required for CORS support to work
+    "Access-Control-Allow-Credentials" : true // Required for cookies, authorization headers with HTTPS
+  }
+
   graphql(schema, JSON.stringify(query), null, identity, variables)
   .then(
-    result => callback(null, {statusCode: 200, body: JSON.stringify(result)}),
+    result => callback(null, {statusCode: 200, headers, body: JSON.stringify(result)}),
     err => callback(err)
   )
 }
