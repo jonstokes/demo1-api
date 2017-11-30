@@ -59,6 +59,15 @@ functions:
           method: get
           cors: true
           authorizer: aws_iam
+  putHello:
+    handler: handler.hello
+    events:
+      - http:
+          path: hello
+          method: put
+          cors: true
+          authorizer: aws_iam
+
   postSignUp:
     handler: handler.postSignup
     events:
