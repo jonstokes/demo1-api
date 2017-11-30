@@ -22,11 +22,10 @@ module.exports.hello = (event, context, callback) => {
 };
 
 module.exports.putHello = (event, context, callback) => {
-  const body = JSON.parse(event.body)
-  const variables = JSON.parse(event.variables)
+  const { event, variables } = event.body
   const identity = event.requestContext.identity
 
-  console.log(body)
+  console.log(query)
   console.log(variables)
 
   const response = {
@@ -38,7 +37,7 @@ module.exports.putHello = (event, context, callback) => {
     },
     body: JSON.stringify({
       message: 'Go Serverless v1.0! Your function executed successfully!',
-      body,
+      query,
       variables,
       identity
     }),
