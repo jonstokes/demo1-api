@@ -88,6 +88,7 @@ const schema = new GraphQLSchema({
     fields: {
       viewer: {
         type: viewerType,
+        resolve: (parent, args, ctx) => ({ isLoggedIn: true, userName: "dude" })
       }
     }
   }),
