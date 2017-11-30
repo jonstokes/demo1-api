@@ -43,6 +43,14 @@ custom:
 #    - exclude-me-dir/**
 
 functions:
+  graphql:
+      handler: handler.graphql
+      events:
+        - http:
+            path: graphql
+            method: get
+            cors: true
+            authorizer: aws_iam
   hello:
     handler: handler.hello
     events:
