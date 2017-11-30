@@ -104,7 +104,7 @@ module.exports.graphql = (event, context, callback) => {
     "Access-Control-Allow-Credentials" : true // Required for cookies, authorization headers with HTTPS
   }
 
-  graphql(schema, JSON.stringify(query), null, identity, variables)
+  graphql(schema, query, null, identity, variables)
   .then(
     result => callback(null, {statusCode: 200, headers, body: JSON.stringify(result)}),
     err => callback(err)
