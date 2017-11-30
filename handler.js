@@ -93,8 +93,15 @@ const schema = new GraphQLSchema({
   }),
 })
 
-module.exports.graphql = (event, context, callback) => graphql(schema, event.queryStringParameters.query)
+
+module.exports.graphql = (event, context, callback) => {
+  const body = JSON.parse(event.body)
+  const { query, variables } = body
+  const identity = event.requestContext.identity
+  
+  graphql(schema, JSON.stringify(query), null, identity, variables)
   .then(
     result => callback(null, {statusCode: 200, body: JSON.stringify(result)}),
     err => callback(err)
   )
+}
