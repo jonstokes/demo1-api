@@ -13,60 +13,21 @@ plugins:
 custom:
   webpackIncludeModules: true
 
-# you can add statements to the Lambda function's IAM Role here
-#  iamRoleStatements:
-#    - Effect: "Allow"
-#      Action:
-#        - "s3:ListBucket"
-#      Resource: { "Fn::Join" : ["", ["arn:aws:s3:::", { "Ref" : "ServerlessDeploymentBucket" } ] ]  }
-#    - Effect: "Allow"
-#      Action:
-#        - "s3:PutObject"
-#      Resource:
-#        Fn::Join:
-#          - ""
-#          - - "arn:aws:s3:::"
-#            - "Ref" : "ServerlessDeploymentBucket"
-#            - "/*"
-
-# you can define service wide environment variables here
-#  environment:
-#    variable1: value1
-
-# you can add packaging information here
-#package:
-#  include:
-#    - include-me.js
-#    - include-me-dir/**
-#  exclude:
-#    - exclude-me.js
-#    - exclude-me-dir/**
-
 functions:
-  graphql:
-      handler: handler.graphql
-      events:
-        - http:
-            path: graphql
-            method: post
-            cors: true
-            authorizer: aws_iam
   hello:
     handler: handler.hello
-    events:
-      - http:
-          path: query
-          method: get
-          cors: true
-          authorizer: aws_iam
-  putHello:
-    handler: handler.putHello
     events:
       - http:
           path: hello
           method: post
           cors: true
-          authorizer: aws_iam
+          integration: lambda
+          authorizer:
+            name: authorizer
+            arn: arn:aws:cognito-idp:us-east-1:704855577349:userpool/us-east-1_EwX5GFtD9
+            claims:
+              - email
+              - username
 
   postSignUp:
     handler: handler.postSignup
