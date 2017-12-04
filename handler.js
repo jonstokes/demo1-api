@@ -4,8 +4,8 @@ module.exports.hello = (event, context, callback) => {
   const body = JSON.parse(event.body)
   const authorizer = event.requestContext.authorizer
 
-  console.log(query)
-  console.log(variables)
+  console.log(body)
+  console.log(authorizer)
 
   const response = {
     statusCode: 200,
