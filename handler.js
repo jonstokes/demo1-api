@@ -1,8 +1,8 @@
 'use strict';
 
 module.exports.hello = (event, context, callback) => {
-  const body = JSON.parse(event.body)
-  const authorizer = event.requestContext.authorizer
+  const { body } = event
+  const { authorizer } = event.requestContext
 
   console.log(body)
   console.log(authorizer)
