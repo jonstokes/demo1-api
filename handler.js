@@ -4,9 +4,13 @@ module.exports.hello = (event, context, callback) => {
   const { body } = event
   const { authorizer } = event.requestContext
 
+  console.log('Logging:')
   console.log(body)
   console.log(authorizer)
-
+  console.log(event)
+  console.log(context)
+  console.log('/Logging')
+  
   const response = {
     statusCode: 200,
     headers: {
@@ -17,7 +21,9 @@ module.exports.hello = (event, context, callback) => {
     body: JSON.stringify({
       message: 'Go Serverless v1.0! Your function executed successfully!',
       body,
-      authorizer
+      authorizer,
+      event,
+      context
     }),
   };
 
